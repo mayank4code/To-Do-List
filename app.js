@@ -9,6 +9,9 @@ const app = express();
 app.set('view engine', 'ejs') ;
 // body-parser Included
 app.use(bodyParser.urlencoded({extended:true}));
+// public Folder for addition files
+app.use(express.static("public"));
+
 
 var items = ["Buy Food" , "Cook Food" , "Eat Food"];
 
@@ -21,7 +24,7 @@ app.get("/" , (req , resp )=>{
     };
 
     var day = today.toLocaleDateString("en-US" , options );
-    
+
     resp.render("list" , {
         kindOfDay : day ,
         newListItems: items
