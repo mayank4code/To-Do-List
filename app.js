@@ -14,12 +14,12 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static("public"));
 
 
-var items = ["Buy Food" , "Cook Food" , "Eat Food"];
-var workItems = [];
+const items = ["Buy Food" , "Cook Food" , "Eat Food"];
+const workItems = [];
 
 app.post("/" , (req ,res)=>{
 
-    let item = req.body.newItem ;
+    const item = req.body.newItem ;
     if (req.body.list === "Work") {
         workItems.push(item);
         res.redirect("/work");        
@@ -46,7 +46,8 @@ app.get("/about" , (req ,res)=>{
 app.get("/" , (req , resp )=>{
     
 
-    let day = date() ;
+    let day = date.getDate() ;
+    // let day = date.getDay() ;
 
     resp.render("list" , {
         
