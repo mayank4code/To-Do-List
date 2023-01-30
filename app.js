@@ -2,6 +2,7 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const date = require(__dirname + "/date.js")
 
 const app = express();
 
@@ -37,20 +38,21 @@ app.get("/work" , (req ,res)=>{
         newListItems : workItems
     });
 });
-
+app.get("/about" , (req ,res)=>{
+    res.render("about" , {
+        listTitle: "About the Owner" 
+    });
+});
 app.get("/" , (req , resp )=>{
-    var today = new Date ();
-    var options ={
-        weekday: "long",
-        day:"numeric",
-        month:"long"
-    };
+    
 
-    var day = today.toLocaleDateString("en-US" , options );
+    let day = date() ;
 
     resp.render("list" , {
+        
         listTitle : day ,
         newListItems: items
+    
     });
 });
 
