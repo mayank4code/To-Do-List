@@ -19,3 +19,8 @@ exports.getDay = ()=> {
     };
     return today.toLocaleDateString("en-US", options);
 };
+
+
+
+
+/*   DataBase Added */ 
