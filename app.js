@@ -21,8 +21,13 @@ mongoose.connect("mongodb://127.0.0.1:27017/ToDoList" );
 const itemsSchema ={
     name:String
 }
+const listSchema = {
+    name:String,
+    items:[itemsSchema]
+}
 
 const Item = mongoose.model("Item", itemsSchema);
+const List = mongoose.model("List" , listSchema); 
 
 const item1 = new Item({name:"Welcome To-Do-List!"});
 const item2 = new Item({name:"Hit the + Button to Add new item."});
@@ -66,30 +71,59 @@ app.get("/date" , (req , resp )=>{
     });
 });
 
-app.get("/work" , (req ,res)=>{
-    res.render("list" , {
-        listTitle: "Work List" , 
-        newListItems : workItems
-    });
+// app.get("/work" , (req ,res)=>{
+//     res.render("list" , {
+//         listTitle: "Work List" , 
+//         newListItems : workItems
+//     });
+// });
+// app.get("/about" , (req ,res)=>{
+//     res.render("about" , {
+//         listTitle: "About the Owner" 
+//     });
+// });
+
+
+app.get("/:customListName" , (req, resp)=>{
+    const customListName = req.params.customListName;
+
+
+
+    List.findOne({name:customListName},(err , foundList)=>{
+        if(!err) {
+            if(!foundList){
+                // console.log("Doesn't Exist")
+                // create a list
+                const list = new List({
+                    name : customListName,
+                    items : defaultItems
+                });
+                list.save();
+                resp.redirect("/"+customListName); 
+            }
+            else {
+                // console.log("Exist")
+                // show the existing List
+                resp.render("list" , { listTitle : customListName  , newListItems: foundItems }); 
+            }
+        }
+    })
+
+
+
 });
-app.get("/about" , (req ,res)=>{
-    res.render("about" , {
-        listTitle: "About the Owner" 
-    });
-});
+
+
+
 
 app.post("/" , (req ,res)=>{
-
+/* adding New ToDos to DataBase Starts */
     const itemName = req.body.newItem ;
 
     const item = new Item({name:itemName});
     item.save();
     res.redirect("/");
-
-    
-    
-    
-    
+/* adding New ToDos to DataBase Starts */
     
     // if (req.body.list === "Work") {
     //     workItems.push(item);
@@ -97,11 +131,19 @@ app.post("/" , (req ,res)=>{
     // } else {
     //     items.push(item);
     //     res.redirect("/");
-    // }
-    
-
-    
+    // }    
 })
+
+app.post("/delete",(req,res)=>{
+    const checkedItemId = req.body.checkbox;
+    // console.log(checkedItemId);
+    Item.findByIdAndRemove(checkedItemId , (err)=>{
+        if(!err){ console.log("Successfully Deleted checked Item")}
+    })  
+    res.redirect("/");  
+
+});
+
 
 
 
