@@ -12,10 +12,10 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-// mongoose.set('strictQuery', false);
-// mongoose.connect("mongodb://127.0.0.1:27017/ToDoList" );
+mongoose.set('strictQuery', false);
+mongoose.connect("mongodb+srv://admin-mayank:Test123@cluster0.71xkik8.mongodb.net/ToDoList" );
 
-mongoose.connect("mongodb://127.0.0.1:27017/ToDoList" );
+
 
 const itemsSchema = {
   name: String
@@ -79,6 +79,7 @@ app.get("/:customListName", function(req, res){
         });
         list.save();
         res.redirect("/" + customListName);
+        
       } else {
         //Show an existing list
 
@@ -103,11 +104,13 @@ app.post("/", function(req, res){
   if (listName === "Today"){
     item.save();
     res.redirect("/");
+    console.log("Successfully Added item to " + listName + " List");
   } else {
     List.findOne({name: listName}, function(err, foundList){
       foundList.items.push(item);
       foundList.save();
       res.redirect("/" + listName);
+      console.log("Successfully Added item to " + listName + " List");
     });
   }
 });
@@ -119,13 +122,14 @@ app.post("/delete", function(req, res){
   if (listName === "Today") {
     Item.findByIdAndRemove(checkedItemId, function(err){
       if (!err) {
-        console.log("Successfully deleted checked item.");
+        console.log("Successfully deleted checked item from " + listName + " List");
         res.redirect("/");
       }
     });
   } else {
     List.findOneAndUpdate({name: listName}, {$pull: {items: {_id: checkedItemId}}}, function(err, foundList){
       if (!err){
+        console.log("Successfully deleted checked item from " + listName + " List");
         res.redirect("/" + listName);
       }
     });
