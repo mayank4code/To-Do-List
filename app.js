@@ -14,8 +14,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 mongoose.set('strictQuery', false);
-mongoose.connect("mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.71xkik8.mongodb.net/${process.env.DB_NAME}");
-// mongoose.connect(${process.env.DB_URI} );
+// mongoose.connect("mongodb+srv://"+process.env.DB_USERNAME+":"+process.env.DB_PASSWORD +"@cluster0.71xkik8.mongodb.net/"+process.env.DB_NAME);
+// console.log(process.env.DB_URI);
+mongoose.connect(process.env.DB_URI );
 
 
 
