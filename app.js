@@ -4,6 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const _ = require("lodash");
+require('dotenv').config();
 
 const app = express();
 
@@ -13,7 +14,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 mongoose.set('strictQuery', false);
-mongoose.connect("mongodb+srv://admin-mayank:Test123@cluster0.71xkik8.mongodb.net/ToDoList" );
+mongoose.connect("mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.71xkik8.mongodb.net/${process.env.DB_NAME}");
+// mongoose.connect(${process.env.DB_URI} );
 
 
 
